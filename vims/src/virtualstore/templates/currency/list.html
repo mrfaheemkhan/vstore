@@ -1,0 +1,75 @@
+{% extends "shared/master.html" %}
+
+{% block title %}Currency List{% endblock %}
+
+{% block css %}{% endblock %}
+
+{% block script %}
+
+<script type="text/javascript">
+
+function onDelete(id){
+
+	jConfirm("Are you sure you want to delete ?", "Delete Currency", function(result){
+				if(result){
+					$("#delete_object_id").val(id);
+					$("#delete_object_form").submit();
+				}
+	});
+	
+}
+
+{% if view_data.message != None %}
+	$(document).ready(alert("{{view_data.message}}"));
+
+{% endif %}
+</script>
+{% endblock %}
+
+{% block body %}
+
+<div class="page">
+<div id="menucontainer">           
+                <ul id="menu">
+                <li><a href="/company/list/">Home</a></li>
+                <li><a href="/company/list/">{{ view_data.parent_obj.company.name }}</a></li>
+                <li><a href="/game/list/?parent={{view_data.parent_obj.company.id}}">{{ view_data.parent_obj.name }}</a></li>
+                </ul>
+            
+            </div>
+<div id="main">
+            
+<table align="center" width="40%">
+<tr>
+	<th colspan="10">
+		<h3>Currency List for {{ view_data.parent_obj.name }}</h3>		
+	</th>
+</tr>
+<tr><td colspan="3"><a href="/{{view_file}}/add/?parent={{view_data.parent_obj.id}}">Add Currency</a></td></tr>
+<tr>
+	<th nowrap>Name</th>	
+	<th nowrap>Active</th>
+		
+	<th>&nbsp;</th><th>&nbsp;</th>
+</tr>
+{% ifequal view_data.object_count 0 %}
+<tr><td colspan="3"><h3>No Entries</h3></td></tr>
+{% else %}
+
+{% for object_in_list in view_data.list_of_object %}
+<tr>
+	<td nowrap>{{ object_in_list.name }}</td>
+	<td nowrap>{{ object_in_list.is_active }}</td>	
+	<td nowrap="nowrap" colspan="2"><a href="/{{view_file}}/edit/?id={{object_in_list.id}}&game={{view_data.parent_obj.id}}">EDIT</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="/{{view_file}}/delete/?id={{object_in_list.id}}">DELETE</a></td>
+	</tr>
+{% endfor %}
+
+{% endifequal %}
+</table>
+</div>
+</div>
+
+<form action="/{{view_file}}/delete/" method="post">
+
+</form>
+ {% endblock %}

@@ -1,0 +1,92 @@
+{% extends "shared/master.html" %}
+
+{% block title %}Add Custom Attribute{% endblock %}
+
+{% block css %}{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="/content/scripts/custom_attribute.js"></script>
+<script type="text/javascript">
+
+	$(document).ready(function(){
+			$("#id_type").change(function(){
+				if($("#id_type").val() == "multivalue"){
+					insertMultiValueHtml(true);
+					$("#multi_value_sub_attributes").show();
+				}else{
+					$("#multi_value_sub_attributes").hide();
+				}
+			});
+			$("#id_name").keypress(function(){
+				return alphanum_customattribute(event);
+			});
+			if($("#id_type_meta_data").val() != null && $("#id_type_meta_data").val() !== undefined && $("#id_type_meta_data").val() != ""){
+				insertMultiValueHtml(true);
+				$("#multi_value_sub_attributes").show();
+			}
+		}); 
+</script> 
+
+{% endblock %}
+
+{% block body %}
+
+<div class="page">
+<div id="menucontainer">           
+                <ul id="menu">
+	                <li><a href="/company/list/">Home</a></li>  
+	                <li><a href="/company/list/">{{view_data.parent_obj.company.name}}</a></li>
+	                <li><a href="/game/list/?parent={{view_data.parent_obj.company.id}}">{{view_data.parent_obj.name}}</a></li>
+                </ul>            
+</div>
+
+<div id="main">
+
+{% if form_action == None %}
+
+<form action="/{{view_file}}/{{view_method}}/" method="post" onsubmit="return makeMultiValueJSONFromHtml();">
+{% else %}
+<form action="{{ form_action }}" method="post">
+{% endif %}
+
+<table align="center" border="1">
+<tr>
+	<th colspan="10">
+		<h3>Add Custom Attribute</h3>		
+	</th>
+</tr>
+
+{% if form.errors %}
+<tr>
+	<th>&nbsp</th><td>{{form.errors}}</td>
+</tr>
+{% endif %}
+{% for field in form %}
+	{% if field.name in "nametype" %}
+	<tr>
+		<th>{{field.label_tag}}</th>
+		<td>{{ field }}</td>
+	</tr>
+	{% endif %}
+{% endfor %}
+<tr id="multi_value_sub_attributes" style='display:none'>
+	<th valign="top">Sub Attributes</th>
+	<td id="multi_value_html">
+	
+	</td>
+</tr>
+<tr>
+	<td colspan="10" align="center"><input type="submit" value="Submit" /></td>
+</tr>
+</table>
+{% csrf_token %}
+<input type="hidden" value="{{view_data.parent_obj.id}}" name="parent" />
+{{ form.type_meta_data}}
+{{ form.game }}
+{{ form.created_by }}
+{{ form.modified_by }}
+</form>
+</div>
+</div>
+<input type="hidden" value="" id="ca_index"/>
+ {% endblock %}

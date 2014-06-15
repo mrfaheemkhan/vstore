@@ -1,0 +1,86 @@
+{% extends "shared/master.html" %}
+
+{% block title %}Game List{% endblock %}
+
+{% block css %}{% endblock %}
+
+{% block script %}
+
+<script type="text/javascript">
+
+function onDelete(id){
+
+	jConfirm("Are you sure you want to delete ?", "Delete Game", function(result){
+				if(result){
+					$("#delete_object_id").val(id);
+					$("#delete_object_form").submit();
+				}
+	});
+	
+}
+
+{% if view_data.message != None %}
+	$(document).ready(alert("{{view_data.message}}"));
+
+{% endif %}
+</script>
+{% endblock %}
+
+{% block body %}
+
+<div class="page">
+<div id="menucontainer">           
+                <ul id="menu">
+                <li><a href="/company/list/">Home</a></li>
+                <li><a href="/game/list/?parent={{view_data.parent_obj.id}}">{{ view_data.parent_obj.name }}</a></li>
+                </ul>
+            
+            </div>
+<div id="main">
+            
+<table align="center" width="40%">
+<tr>
+	<th colspan="10">
+		<h3>Game List for {{ view_data.parent_obj.name }}</h3>		
+	</th>
+</tr>
+<tr><td colspan="3"><a href="/{{view_file}}/add/?parent={{view_data.parent_obj.id}}">Add Game</a></td></tr>
+<tr>
+	<th nowrap>Name</th>
+	<th>&nbsp;</th>
+	<th>&nbsp;</th>
+	<th nowrap>Visibe Id</th>
+	<th nowrap>Active</th>
+	<th nowrap>Web Service URL</th>	
+	<th nowrap>Item Store URL</th>		
+	
+	<th>&nbsp;</th><th>&nbsp;</th>
+</tr>
+{% ifequal view_data.object_count 0 %}
+<tr><td colspan="3"><h3>No Entries</h3></td></tr>
+{% else %}
+
+{% for object_in_list in view_data.list_of_object %}
+<tr>
+	<td nowrap><a href="/store/list/?parent={{ object_in_list.id }}">{{ object_in_list.name }}</a></td>
+	<td nowrap="nowrap" ><a href="/currency/list/?parent={{object_in_list.id}}">Currency</a></td>
+	<td nowrap="nowrap" ><a href="/custom_attribute/list/?parent={{object_in_list.id}}">Custom Attributes</a></td>
+	<td nowrap>{{ object_in_list.visible_id }}</td>
+	<td nowrap>{{ object_in_list.is_active }}</td>
+	<td nowrap>{{ object_in_list.web_service_url }}</td>
+	<td nowrap>{{ object_in_list.item_store_url }}</td>	
+	<td nowrap="nowrap" colspan="2"><a href="/{{view_file}}/edit/?id={{object_in_list.id}}&company={{view_data.parent_obj.id}}">EDIT</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" onclick="onDelete('{{object_in_list.id}}')">DELETE</a></td>	
+	</tr>
+{% endfor %}
+
+{% endifequal %}
+</table>
+</div>
+</div>
+
+<form action="/{{view_file}}/delete/" method="post" id="delete_object_form">
+<input type="hidden" name="id" id="delete_object_id" />
+<input type="hidden" name="company" value="{{view_data.parent_obj.id}}" />
+{% csrf_token %}
+</form>
+ {% endblock %}

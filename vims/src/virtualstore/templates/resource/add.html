@@ -1,0 +1,59 @@
+{% extends "shared/master.html" %}
+
+{% block title %}Add Resource{% endblock %}
+
+{% block css %}{% endblock %}
+
+{% block script %}{% endblock %}
+
+{% block body %}
+
+<div class="page">
+<div id="menucontainer">           
+                <ul id="menu">
+                <li><a href="/company/list/">Home</a></li> 
+                {% if view_data.parent_type == 'store'%} 
+                <li><a href="/game/list/?parent={{view_data.parent_obj.game.company.id}}">{{view_data.parent_obj.game.company.name}}</a></li>
+                <li><a href="/store/list/?parent={{view_data.parent_obj.game.id}}">{{view_data.parent_obj.game.name}}</a></li>
+                <li><a href="/category/list/?parent={{view_data.parent_obj.id}}">{{view_data.parent_obj.name}}</a></li>
+                {% endif %}
+                
+               	{% if view_data.parent_type == 'category' %}                
+               	<li><a href="/game/list/?parent={{view_data.parent_obj.store.game.company.id}}">{{view_data.parent_obj.store.game.company.name}}</a></li>
+                <li><a href="/store/list/?parent={{view_data.parent_obj.store.game.id}}">{{view_data.parent_obj.store.game.name}}</a></li>
+                <li><a href="/category/list/?parent={{view_data.parent_obj.store.id}}">{{view_data.parent_obj.store.name}}</a></li>
+                <li><a href="/item/list/?parent={{view_data.parent_obj.id}}">{{view_data.parent_obj.name}}</a></li>
+				{% endif %}
+				
+				{% if view_data.parent_type == 'item' %}                
+               	<li><a href="/game/list/?parent={{view_data.parent_obj.category.store.game.company.id}}">{{view_data.parent_obj.category.store.game.company.name}}</a></li>
+                <li><a href="/store/list/?parent={{view_data.parent_obj.category.store.game.id}}">{{view_data.parent_obj.category.store.game.name}}</a></li>
+                <li><a href="/category/list/?parent={{view_data.parent_obj.category.store.id}}">{{view_data.parent_obj.category.store.name}}</a></li>
+                <li><a href="/item/list/?parent={{view_data.parent_obj.category.id}}">{{view_data.parent_obj.category.name}}</a></li>
+                <li><a href="/resource/list/?parent={{view_data.parent_obj.id}}&parent_type=item">{{view_data.parent_obj.name}}</a></li>
+				{% endif %}
+						               
+                </ul>
+            
+            </div>
+
+<div id="main">
+
+<form action="/{{view_file}}/{{view_method}}/" method="post" enctype="multipart/form-data">
+<table align="center" border="1">
+<tr>
+	<th colspan="10">
+		<h3>Add Resource for {{ view_data.parent_obj.name }}</h3>		
+	</th>
+</tr>
+{{ form.as_table }}
+<tr>
+	<td colspan="10" align="center"><input type="submit" value="Submit" /></td>
+</tr>
+</table>
+{% csrf_token %}
+
+</form>
+</div>
+</div>
+ {% endblock %}

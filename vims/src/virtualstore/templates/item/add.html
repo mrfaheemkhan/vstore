@@ -1,0 +1,101 @@
+{% extends "shared/master.html" %}
+
+{% block title %}Add Item{% endblock %}
+
+{% block css %}{% endblock %}
+
+{% block script %}
+
+<script type="text/javascript" src="/content/scripts/buy_price.js"></script>
+<script type="text/javascript" src="/content/scripts/sell_price.js"></script>
+<script type="text/javascript" src="/content/scripts/custom_attribute.js"></script>
+
+<script type="text/javascript">
+
+	var currency_list = {{ view_data.currency_list|safe }}
+	var custom_attributes = {{view_data.custom_attributes_json|safe}}
+
+$(window).load(function(){
+	$("#id_buy_price").click(function(){ showBuyPricePopup(); });
+	$("#id_sell_price").click(function(){ showSellPricePopup(); });
+	for(i in custom_attributes){
+		custom_attributes[i]["index"] = i;
+		updateCustomAttributeWidget(custom_attributes[i])
+		
+		{% if view_data.breeded_dropdown_data %}
+		var breed_data = {{ view_data.breeded_dropdown_data|safe }};
+		if(custom_attributes[i]["label"] == 'parent_x' || custom_attributes[i]["label"] == 'parent_y'){
+			makeDropDownForBreededFish(custom_attributes[i]["name"], breed_data, $("#id_"+custom_attributes[i]["name"]).val());
+		}
+		{% endif %}
+	}
+});
+
+
+</script>
+
+{% endblock %}
+
+{% block body %}
+
+<div class="page">
+<div id="menucontainer">           
+                <ul id="menu">
+                <li><a href="/company/list/">Home</a></li>  
+                <li><a href="/game/list/?parent={{view_data.parent_obj.store.game.company.id}}">{{view_data.parent_obj.store.game.company.name}}</a></li>
+                <li><a href="/store/list/?parent={{view_data.parent_obj.store.game.id}}">{{view_data.parent_obj.store.game.name}}</a></li>
+                <li><a href="/category/list/?parent={{view_data.parent_obj.store.id}}">{{view_data.parent_obj.store.name}}</a></li>
+                <li><a href="/item/list/?parent={{view_data.parent_obj.id}}">{{view_data.parent_obj.name}}</a></li>
+                </ul>            
+            </div>
+
+<div id="main">
+
+{% if form_action == None %}
+
+<form action="/{{view_file}}/{{view_method}}/" method="post">
+{% else %}
+<form action="{{ form_action }}" method="post">
+{% endif %}
+
+<table align="center" border="1">
+<tr>
+	<th colspan="10">
+		<h3>Add Item</h3>		
+	</th>
+</tr>
+{% for field in form %}
+{% if field.name in view_data.fields_filter and field.name not in "version"%}
+<tr>
+	<th>{{ field.label_tag }}</th>
+	<td>{{ field.errors }}{{ field }}</td>
+</tr>
+{%endif%}
+{% endfor%}
+
+{% for ca in view_data.custom_attributes %}
+<tr>
+	<th>{{ ca.label }}</th>
+	<td>{{ ca.errors }}<input type="hidden" id="{{ca.id}}" /></td>
+</tr>
+{% endfor%}
+<tr>
+	<td colspan="10" align="center"><input type="submit" value="Submit" /></td>
+</tr>
+</table>
+{% csrf_token %}
+<input type="hidden" value="{{view_data.parent_obj.id}}" name="parent" />
+{{ form.created_by }}
+{{ form.modified_by }}
+{{ form.version }}
+{{ form.category }}
+{{ form.min_version }}
+{{ form.max_version }}
+{{ form.visible_to }}
+</form>
+</div>
+</div>
+<input type="hidden" value="" id="bp_index" />
+<input type="hidden" value="" id="sp_index" />
+<input type="hidden" value="" id="mv_index" />
+ {% endblock %}

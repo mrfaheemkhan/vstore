@@ -1,0 +1,44 @@
+{% extends "shared/master.html" %}
+
+{% block title %}Edit Company{% endblock %}
+
+{% block css %}{% endblock %}
+
+{% block script %}{% endblock %}
+
+{% block body %}
+
+<div class="page">
+<div id="menucontainer">           
+                <ul id="menu">
+                <li><a href="/company/list/">Home</a></li>  
+                </ul>
+            
+            </div>
+
+<div id="main">
+
+{% if form_action == None %}
+
+<form action="/{{view_file}}/{{view_method}}/" method="post">
+{% else %}
+<form action="{{ form_action }}" method="post">
+{% endif %}
+
+<table align="center" border="1">
+<tr>
+	<th colspan="10">
+		<h3>Edit Company</h3>		
+	</th>
+</tr>
+{{ form.as_table }}
+<tr>
+	<td colspan="10" align="center"><input type="submit" value="Submit" /></td>
+</tr>
+</table>
+{% csrf_token %}
+<input type="hidden" name="id" value="{{ form.instance.id }}" />
+</form>
+</div>
+</div>
+ {% endblock %}

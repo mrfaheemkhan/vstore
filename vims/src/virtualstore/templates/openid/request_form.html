@@ -1,0 +1,66 @@
+<html>
+
+<head>
+	<script type="text/javascript">
+		function submitMessage(){
+			document.getElementById("openid_message").submit(); 
+		} 
+
+		function setDivLocation(){
+			var windowHeight =window.innerHeight;
+			var windowWidth =window.innerWidth;
+			var shadowDiv = document.getElementById('shadow');
+			
+			shadowDiv.style.top = (windowHeight - shadowDiv.offsetHeight) / 2;
+			shadowDiv.style.left = (windowWidth - shadowDiv.offsetWidth) / 2;
+		}
+	</script>
+
+	<style>
+		
+		div.messageSize{
+		    	position:absolute;
+		     	width: 335px;
+				height: 160px;
+		    }
+		div.progress{
+			background-image:url('/content/images/progress-bar-indeterminate.gif');
+			height:10px;
+			width:335px;
+			z-index:2;
+			position:absolute;
+			bottom:1px;
+			border-radius:5px;
+		}
+		div.message{
+			margin-top:50px;
+			margin-left:20px;
+			height:100px;
+			
+		}
+	</style>
+<link href="/content/css/site.css" rel="stylesheet" />
+</head>
+
+<body onload="setDivLocation();submitMessage();">
+{{html|safe}}
+
+
+
+
+<div class="shadow messageSize" id='shadow'>
+		<div class="box">
+			<div class="message">Redirecting...<br>Click <a href="#" onclick="return submitMessage();">here</a> if it doesn't redirect automatically.
+			</div>
+		
+			<div class="progress">
+			</div>
+		</div>
+</div>
+
+
+
+
+
+</body>
+</html>

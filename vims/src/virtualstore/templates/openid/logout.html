@@ -1,0 +1,50 @@
+<html>
+
+<head>
+	<script type="text/javascript">
+		function setDivLocation(){
+			var windowHeight =window.innerHeight;
+			var windowWidth =window.innerWidth;
+			var shadowDiv = document.getElementById('shadow');
+			shadowDiv.style.top = (windowHeight - shadowDiv.offsetHeight) / 2;
+			shadowDiv.style.left = (windowWidth - shadowDiv.offsetWidth) / 2;
+		}
+	</script>
+		<link href="/content/css/site.css" rel="stylesheet" />
+
+	<style>
+		
+		div.messageSize{
+		    	position:absolute;
+		     	width: 335px;
+				height: 160px;
+		    }
+		div.message{
+			margin-top:50px;
+			margin-left:20px;
+			height:100px;
+			
+		}
+	</style>
+</head>
+
+<body onload="setDivLocation();submitMessage();">
+{{html|safe}}
+
+
+
+
+<div class="shadow messageSize" id='shadow'>
+		<div class="box">
+			<div class="message">{{username}} - {{email}} has been logged out successfully! 
+				<br>Click <a href="/">here</a> to login again.
+			</div>
+		</div>
+</div>
+
+
+
+
+
+</body>
+</html>

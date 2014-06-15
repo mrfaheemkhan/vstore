@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>{% block title %}Page Title{% endblock %}</title>
+		
+		<link href="/content/css/site.css" type="text/css" rel="stylesheet" />
+		<link href="/content/css/jquery-ui-1.8.16.custom.css" type="text/css" rel="stylesheet" />
+		<link href="/content/css/ui.multiselect.css" type="text/css" rel="stylesheet" />
+		<link href="/content/css/jquery.alerts.css" type="text/css" rel="stylesheet" />
+		
+		{% block css %}
+		{% endblock %}		
+		
+		<script src="/content/scripts/jquery.js"></script>		
+		<script src="/content/scripts/jquery-ui-1.8.16.custom.min.js"></script>		
+		<script src="/content/scripts/jquery-ui-timepicker-addon-0.5.min.js"></script>
+		<script src="/content/scripts/jquery.scrollTo-min.js"></script>
+		<script src="/content/scripts/ui.multiselect.js"></script>
+		<script src="/content/scripts/json2.js"></script>		
+		<script src="/content/scripts/jquery.alerts.js"></script>
+		<script src="/content/scripts/vims.js"></script>
+		
+		{% block script %}
+		{% endblock %}
+
+	</head>
+
+	<body >
+	{% if user.is_authenticated %}
+	
+	<table width="100%" align="right" style="border:solid 0px">
+		<tr >
+			<td nowrap="nowrap" width="100%" style="border: 0px" align="right"><a style="color:#FFF;text-decoration: none" href="/accounts/logout/">[ Logout ]</a></td>
+		</tr>
+	</table>
+	{% endif %}
+	{% block body %}
+	{% endblock %}	
+	</body>
+</html>
